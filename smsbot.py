@@ -18,13 +18,10 @@ class main():
     def banner():
         
         print(f"""
-    {re}╔╦╗{cy}┌─┐┬  ┌─┐{re}╔═╗  ╔═╗{cy}┌─┐┬─┐┌─┐┌─┐┌─┐┬─┐
-    {re} ║ {cy}├┤ │  ├┤ {re}║ ╦  ╚═╗{cy}│  ├┬┘├─┤├─┘├┤ ├┬┘
-    {re} ╩ {cy}└─┘┴─┘└─┘{re}╚═╝  ╚═╝{cy}└─┘┴└─┴ ┴┴  └─┘┴└─
-
-                version : 3.1
-    youtube.com/channel/UCnknCgg_3pVXS27ThLpw3xQ
-            """)
+{cy}TELEGRAM ÜYE ÇEKİCİ
+          
+    {cy}Sürüm: 1.0
+        """)
 
     def send_sms():
         try:
@@ -36,7 +33,7 @@ class main():
         except KeyError:
             os.system('clear')
             main.banner()
-            print(re+"[!] run python3 setup.py first !!\n")
+            print(re+"[!] önce python3 setup.py çalıştırın !!\n")
             sys.exit(1)
 
         client = TelegramClient(phone, api_id, api_hash)
@@ -46,7 +43,7 @@ class main():
             client.send_code_request(phone)
             os.system('clear')
             main.banner()
-            client.sign_in(phone, input(gr+'[+] Enter the code: '+re))
+            client.sign_in(phone, input(gr+'[+] Kodunuzu Girin: '+re))
         
         os.system('clear')
         main.banner()
@@ -62,10 +59,10 @@ class main():
                 user['access_hash'] = int(row[2])
                 user['name'] = row[3]
                 users.append(user)
-        print(gr+"[1] send sms by user ID\n[2] send sms by username ")
-        mode = int(input(gr+"Input : "+re))
+        print(gr+"[1] kullanıcı ID'si ile mesaj gönder\n[2] kullanıcı adı ile mesaj gönder")
+        mode = int(input(gr+"Seçim Yapın: "+re))
          
-        message = input(gr+"[+] Enter Your Message : "+re)
+        message = input(gr+"[+] Mesajınızı Girin: "+re)
          
         for user in users:
             if mode == 2:
@@ -75,25 +72,24 @@ class main():
             elif mode == 1:
                 receiver = InputPeerUser(user['id'],user['access_hash'])
             else:
-                print(re+"[!] Invalid Mode. Exiting.")
+                print(re+"[!] Geçersiz Mod. Çıkılıyor.")
                 client.disconnect()
                 sys.exit()
             try:
-                print(gr+"[+] Sending Message to:", user['name'])
+                print(gr+"[+] Mesaj Gönderiliyor:", user['name'])
                 client.send_message(receiver, message.format(user['name']))
-                print(gr+"[+] Waiting {} seconds".format(SLEEP_TIME))
+                print(gr+"[+] {} saniye bekleniyor".format(SLEEP_TIME))
                 time.sleep(SLEEP_TIME)
             except PeerFloodError:
-                print(re+"[!] Getting Flood Error from telegram. \n[!] Script is stopping now. \n[!] Please try again after some time.")
+                print(re+"[!] Telegram'dan Flood Hatası alındı. \n[!] Script şu anda duruyor. \n[!] Lütfen biraz sonra tekrar deneyin.")
                 client.disconnect()
                 sys.exit()
             except Exception as e:
-                print(re+"[!] Error:", e)
-                print(re+"[!] Trying to continue...")
+                print(re+"[!] Hata:", e)
+                print(re+"[!] Devam etmeye çalışılıyor...")
                 continue
         client.disconnect()
-        print("Done. Message sent to all users.")
-
+        print("Tamam. Mesaj tüm kullanıcılara gönderildi.")
 
 
 main.send_sms()
