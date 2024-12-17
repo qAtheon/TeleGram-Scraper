@@ -17,11 +17,9 @@ cy="\033[1;36m"
 
 def banner():
     print(f"""
-{re}╔╦╗{cy}┌─┐┬  ┌─┐{re}╔═╗  ╔═╗{cy}┌─┐┬─┐┌─┐┌─┐┌─┐┬─┐
-{re} ║ {cy}├┤ │  ├┤ {re}║ ╦  ╚═╗{cy}│  ├┬┘├─┤├─┘├┤ ├┬┘
-{re} ╩ {cy}└─┘┴─┘└─┘{re}╚═╝  ╚═╝{cy}└─┘┴└─┴ ┴┴  └─┘┴└─
-
-            version : 1.0
+{cy}TELEGRAM ÜYE ÇEKİCİ
+          
+    {cy}Sürüm: 1.0
         """)
 
 cpass = configparser.RawConfigParser()
@@ -35,7 +33,7 @@ try:
 except KeyError:
     os.system('clear')
     banner()
-    print(re+"[!] run python3 setup.py first !!\n")
+    print(re+"[!] İlk olarak python3 setup.py'yi çalıştırın !!\n")
     sys.exit(1)
 
 client.connect()
@@ -43,7 +41,7 @@ if not client.is_user_authorized():
     client.send_code_request(phone)
     os.system('clear')
     banner()
-    client.sign_in(phone, input(gr+'[+] Enter the code: '+re))
+    client.sign_in(phone, input(gr+'[+] Kodu girin: '+re))
  
 os.system('clear')
 banner()
@@ -86,38 +84,38 @@ for group in groups:
     print(gr+'['+cy+str(i)+gr+']'+cy+' - '+group.title)
     i+=1
 
-print(gr+'[+] Choose a group to add members')
-g_index = input(gr+"[+] Enter a Number : "+re)
+print(gr+'[+] Üyeleri eklemek için bir grup seçin')
+g_index = input(gr+"[+] Bir numara girin: "+re)
 target_group=groups[int(g_index)]
  
 target_group_entity = InputPeerChannel(target_group.id,target_group.access_hash)
  
-print(gr+"[1] add member by user ID\n[2] add member by username ")
-mode = int(input(gr+"Input : "+re)) 
+print(gr+"[1] Kullanıcı ID'si ile üye ekle\n[2] Kullanıcı adı ile üye ekle")
+mode = int(input(gr+"Giriş: "+re)) 
 n = 0
  
 for user in users:
     n += 1
     if n % 50 == 0:
-	    time.sleep(1)
-	    try:
-	        print ("Adding {}".format(user['id']))
-	        if mode == 1:
-	            if user['username'] == "":
-	                continue
-	            user_to_add = client.get_input_entity(user['username'])
-	        elif mode == 2:
-	            user_to_add = InputPeerUser(user['id'], user['access_hash'])
-	        else:
-	            sys.exit(re+"[!] Invalid Mode Selected. Please Try Again.")
-	        client(InviteToChannelRequest(target_group_entity,[user_to_add]))
-	        print(gr+"[+] Waiting for 5-10 Seconds...")
-	        time.sleep(random.randrange(5, 10))
-	    except PeerFloodError:
-	        print(re+"[!] Getting Flood Error from telegram. \n[!] Script is stopping now. \n[!] Please try again after some time.")
-	    except UserPrivacyRestrictedError:
-	        print(re+"[!] The user's privacy settings do not allow you to do this. Skipping.")
-	    except:
-	        traceback.print_exc()
-	        print(re+"[!] Unexpected Error")
-	        continue
+        time.sleep(1)
+        try:
+            print ("Ekleme işlemi: {}".format(user['id']))
+            if mode == 1:
+                if user['username'] == "":
+                    continue
+                user_to_add = client.get_input_entity(user['username'])
+            elif mode == 2:
+                user_to_add = InputPeerUser(user['id'], user['access_hash'])
+            else:
+                sys.exit(re+"[!] Geçersiz Mod Seçildi. Lütfen Tekrar Deneyin.")
+            client(InviteToChannelRequest(target_group_entity,[user_to_add]))
+            print(gr+"[+] 5-10 saniye bekleniyor...")
+            time.sleep(random.randrange(5, 10))
+        except PeerFloodError:
+            print(re+"[!] Telegram'dan Flood Hatası alındı. \n[!] Script şu an durduruluyor. \n[!] Bir süre sonra tekrar deneyin.")
+        except UserPrivacyRestrictedError:
+            print(re+"[!] Kullanıcının gizlilik ayarları bunu yapmanıza izin vermiyor. Atlanıyor.")
+        except:
+            traceback.print_exc()
+            print(re+"[!] Beklenmedik Hata")
+            continue
